@@ -6,6 +6,7 @@ const consumeTask = async () => {
   const connection = await amqp.connect("amqp://localhost");
   const channel = await connection.createChannel();
   await channel.assertQueue(queueName, { durable: true });
+  channel.prefetch(1);
   console.log(`Waiting a tasks in queue: ${queueName}`);
   await channel.consume(
     queueName,
