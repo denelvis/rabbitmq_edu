@@ -1,6 +1,6 @@
 const amqplib = require("amqplib");
 
-const exchangeName = "header_logs";
+const exchangeName = "headers_logs";
 const args = process.argv.slice(2);
 const msg = args[0] || "Hello world";
 
