@@ -6,7 +6,7 @@ const seq = {};
 function fibonacci(num) {
   if (num === 0 || num === 1) return num;
   if (num in seq) return seq[num];
-  return (seq[num] = fibonacci(n - 1) + fibonacci(n - 2));
+  return (seq[num] = fibonacci(num - 1) + fibonacci(num - 2));
 }
 
 const sendFib = async () => {

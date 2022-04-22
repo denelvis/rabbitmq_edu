@@ -16,17 +16,27 @@ const getFib = async () => {
   const channel = await connection.createChannel();
   const q = await channel.assertQueue("", { exclusive: true });
 
-  console.log(" [x] Requesting fib(%d)", num);
+  console.log("[x] Requesting fib(%d)", num);
 
   channel.sendToQueue("rpc_queue", Buffer.from(num.toString()), {
     replyTo: q.queue,
     correlationId: uuid,
   });
-  console.log("Sent: ", num);
-  setTimeout(() => {
-    connection.close();
-    process.exit(0);
-  }, 500);
+
+  channel.consume(
+    q.queue,
+    (msg) => {
+      if (msg.properties.correlationId === uuid) {
+        console.log("[.] Got %s", msg.content.toString());
+        console.log("Sent: ", num);
+        setTimeout(() => {
+          connection.close();
+          process.exit(0);
+        }, 500);
+      }
+    },
+    { noAck: true }
+  );
 };
 
 getFib();
